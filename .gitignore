@@ -1,0 +1,29 @@
+# # 「.AppleDouble」フォルダを除外
+# .AppleDouble/
+
+# # 「.DS_Store」や「._.DS_Store」を除外
+# *.DS_Store
+
+# # ファイルの場合
+# git rm --cached mfp.cache.js
+
+# # フォルダの場合 (-r を忘れずに!)
+# git rm --cached -r cache/
+
+# # コミットする(.gitignoreの変更をaddしてから)
+# git add .gitignore
+# git commit -m ".gitignore 除外指定を変更"
+
+# # 一旦全てを対象から外す
+# git rm --cached -r .
+
+# # あらためて、全てを対象に含める
+# # (.gitignoreに記述されたものは除外される)
+# git add -A .
+
+# # コミットする
+# git commit -m ".gitignore 除外指定を変更"
+
+chromedriver.exe
+python3-チートシート.pdf
+dist
