@@ -7,6 +7,51 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 import configparser
 
+def click_element(element_type, element_name):
+    if element_type == 'id':
+        WebDriverWait(driver, 30).until(
+            EC.element_to_be_clickable((By.ID, element_name)))
+        driver.find_element_by_id(element_name).click()
+    elif element_type == 'link_text':
+        WebDriverWait(driver, 30).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, element_name)))
+        driver.find_element_by_link_text(element_name).click()
+    elif element_type == 'xpath':
+        WebDriverWait(driver, 30).until(
+            EC.element_to_be_clickable((By.XPATH, element_name)))
+        driver.find_element_by_xpath(element_name).click()
+    elif element_type == 'name':
+        WebDriverWait(driver, 30).until(
+            EC.element_to_be_clickable((By.NAME, element_name)))
+        driver.find_element_by_name(element_name).click()
+    elif element_type == 'css_selector':
+        WebDriverWait(driver, 30).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, element_name)))
+        driver.find_element_by_css_selector(element_name).click()
+
+def sendkeys_element(element_type, element_name, send_strings):
+    if element_type == 'id':
+        WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.ID, element_name)))
+        driver.find_element_by_id(element_name).send_keys(send_strings)
+    elif element_type == 'link_text':
+        WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.LINK_TEXT, element_name)))
+        driver.find_element_by_link_text(element_name).send_keys(send_strings)
+    elif element_type == 'xpath':
+        WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.XPATH, element_name)))
+        driver.find_element_by_xpath(element_name).send_keys(send_strings)
+    elif element_type == 'name':
+        WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.NAME, element_name)))
+        driver.find_element_by_name(element_name).send_keys(send_strings)
+    elif element_type == 'css_selector':
+        WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, element_name)))
+        driver.find_element_by_css_selector(
+            element_name).send_keys(send_strings)
+
 inifile = configparser.ConfigParser()
 inifile.read('./sandals.ini', 'UTF-8')
 price = inifile.get('設定', '価格')
@@ -52,24 +97,28 @@ for i in range(total):
     time.sleep(1)
     driver.find_elements_by_id("acMdCateChange").click()  # カテゴリ選択
     time.sleep(1)
-    driver.find_elements_by_xpath("//*[@id='CategorySelect']/ul/li[1]/a/div").click() #リストから選択
+    driver.find_elements_by_xpath(
+        "//*[@id='CategorySelect']/ul/li[1]/a/div").click()  # リストから選択
     time.sleep(1)
-    driver.find_elements_by_id("24198").click()   #住まい
+    driver.find_elements_by_id("24198").click()  # 住まい
     time.sleep(1)
-    driver.find_elements_by_id("42160").click()   #家庭用品
+    driver.find_elements_by_id("42160").click()  # 家庭用品
     time.sleep(1)
-    driver.find_elements_by_id("2084047779").click() #スリッパ
+    driver.find_elements_by_id("2084047779").click()  # スリッパ
     time.sleep(1)
     driver.find_elements_by_id("updateCategory").click()  # このカテゴリに決定
     time.sleep(1)
 
-    driver.FindElementByXPath("//*[@id='ImageUpArea']/div[5]/a").click() #写真の登録
+    driver.FindElementByXPath(
+        "//*[@id='ImageUpArea']/div[5]/a").click()  # 写真の登録
     time.sleep(1)
     sandal_size = inifile.get('出品', 'サイズ' + str(i))
     sandal_no = inifile.get('出品', '通番' + str(i))
-    driver.find_elements_by_name("ImageFile1").send_keys(folder_name + str(i) + '.jpg')
+    driver.find_elements_by_name("ImageFile1").send_keys(
+        folder_name + str(i) + '.jpg')
     time.sleep(1)
-    driver.find_elements_by_name("ImageFile2").send_keys(folder_name + str(i) + 'a.jpg')
+    driver.find_elements_by_name("ImageFile2").send_keys(
+        folder_name + str(i) + 'a.jpg')
     time.sleep(1)
     driver.find_elements_by_id("cnfm_btn").click()
     time.sleep(1)
