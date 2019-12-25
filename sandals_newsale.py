@@ -28,6 +28,10 @@ def click_element(element_type, element_name):
         WebDriverWait(driver, 30).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, element_name)))
         driver.find_element_by_css_selector(element_name).click()
+    elif element_type == 'partial_link_text':
+        WebDriverWait(driver, 30).until(
+            EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT, element_name)))
+        driver.find_element_by_partial_link_text(element_name).click()
 
 def sendkeys_element(element_type, element_name, send_strings):
     if element_type == 'id':

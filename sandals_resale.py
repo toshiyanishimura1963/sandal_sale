@@ -97,12 +97,8 @@ click_element('link_text', '落札者なし')
 # get all the href attributes
 # ダイアログの問い合わせステータス
 display_dialog1 = "yes"
-links = []
-links = driver.find_elements_by_partial_link_text("布ぞうり")
-print('布ぞうりの数 = ', len(links))
-count = len(links)
-for webitem in links:
-    print(count-=1)
+while driver.find_elements_by_partial_link_text("布ぞうり").count > 0:
+    print(driver.find_elements_by_partial_link_text("布ぞうり").count)
     # 不要なダイアログの対応 落札者なしのリスト
     if len(driver.find_elements_by_class_name('closeBtn')) > 0:
         driver.execute_script(
