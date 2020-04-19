@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.select import Select
 import configparser
 
 
@@ -75,21 +76,17 @@ driver.implicitly_wait(20)  # 秒
 driver.get("https://auctions.yahoo.co.jp")
 
 if len(driver.find_elements_by_link_text("ログイン")) > 0:
-    driver.find_element_by_link_text("ログイン").click()
-    time.sleep(1)
-    driver.find_element_by_id('username').send_keys(USER_ID)
-    driver.find_element_by_id("btnNext").click()
-    time.sleep(1)
-    driver.find_element_by_id("passwd").send_keys(PASSWD)
+    click_element("link_text", "ログイン")
+    sendkeys_element("id", "username", USER_ID)
+    click_element("id", "btnNext")
+    sendkeys_element("id", "passwd", PASSWD)
 if not driver.find_element_by_id("persistent").is_selected():
-    driver.find_element_by_id("persistent").click()
-driver.find_element_by_id("btnSubmit").click()
+    click_element("id", "persistent")
+click_element("id", "btnSubmit")
 time.sleep(1)
-# if driver.find_element_by_id("js-close"):
-#     driver.find_element_by_id("js-close").click()
 if len(driver.find_elements_by_link_text("ご利用中のサービスに戻る")) > 0:
-    driver.find_element_by_link_text("ご利用中のサービスに戻る").click()
-    time.sleep(1)
+    click_element("link_text", "ご利用中のサービスに戻る")
+
 click_element('link_text', 'マイオク')
 click_element('link_text', '出品終了分')
 click_element('link_text', '落札者なし')
@@ -97,8 +94,8 @@ click_element('link_text', '落札者なし')
 # get all the href attributes
 # ダイアログの問い合わせステータス
 display_dialog1 = "yes"
-while len(driver.find_elements_by_partial_link_text("布ぞうり")):
-    print(len(driver.find_elements_by_partial_link_text("布ぞうり")))
+while len(driver.find_elements_by_partial_link_text("布ぞうり")) > 0:
+    print("再出品する布ぞうりの数: " + str(len(driver.find_elements_by_partial_link_text("布ぞうり"))))
     # 不要なダイアログの対応 落札者なしのリスト
     if len(driver.find_elements_by_class_name('closeBtn')) > 0:
         driver.execute_script(
@@ -110,45 +107,58 @@ while len(driver.find_elements_by_partial_link_text("布ぞうり")):
     click_element('partial_link_text', '布ぞうり')
     click_element('link_text', '再出品')
 
-    # paypay のダイアログ表示を消去
-    print(driver.find_element_by_id('js-ListingModal').get_attribute('class'))
-    if 'is-show' in driver.find_element_by_id('js-ListingModal').get_attribute('class'):
-        driver.find_element_by_id("js-ListingModalClose").click()
-
     # 返品を受け付けるにチェックがはいっていない場合は、チェックする
     WebDriverWait(driver, 30).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="FormReqrd"]/div[13]/input')))
     if driver.find_element_by_xpath('//*[@id="FormReqrd"]/div[13]/input').get_attribute('value') == "0":
         print('返品可をチェックする')
-        driver.find_element_by_xpath(
-            '//*[@id="FormReqrd"]/div[13]/label/span[1]').click()
+        click_element("xpath", '//*[@id="FormReqrd"]/div[13]/label/span[1]')
 
     # 値下げ交渉はしないので、値下げ交渉のチェックを外す
     if 'is-check' in driver.find_element_by_xpath('//*[@id="price_buynow"]/div[3]/label').get_attribute('class'):
         print('値引き交渉するのチェックを外す')
-        driver.find_element_by_xpath(
-            '//*[@id="price_buynow"]/div[3]/label/span[1]').click()
+        click_element("xpath",
+                      '//*[@id="price_buynow"]/div[3]/label/span[1]')
 
     if len(driver.find_elements_by_link_text("HTMLタグ入力")) > 0:
-        driver.find_element_by_link_text("HTMLタグ入力").click()
+        click_element("link_text", "HTMLタグ入力")
+        print('HTMLタグ入力')
 
-    # '落札者が送料負担
-    click_element('xpath', '//*[@id="FormReqrd"]/section[2]/div[6]/label[2]')
+    # '出品者が送料負担
+    click_element("xpath",
+                  '//*[@id="FormReqrd"]/section[2]/div[6]/label[1]')
+    print("出品者が送料負担")
+
     # '1から2日で発送
-    click_element('xpath', '//*[@id="standardDeliveryArea"]/div[2]/label[1]')
-    # 'その他の配送方法
-    if 'is-close' in driver.find_element_by_xpath('//*[@id="standardDeliveryArea"]/section/div/div/dl').get_attribute('class'):
-        driver.find_element_by_xpath(
-            '//*[@id="standardDeliveryArea"]/section/div/div/dl').click()
-    # 'クリックポスト
+    click_element("xpath",
+                  '//*[@id="standardDeliveryArea"]/div[2]/label[1]')
+    print("1から2日で発送")
+
+    # 商品の状態を入力
+    Select(driver.find_element_by_name("istatus")).select_by_value('new')
+    print("商品の状態を入力")
+
+     # ゆうパケットお手軽版
+    click_element("xpath", '//*[@id="yubinForm"]/div[2]/ul/li[1]')
+    print("ゆうパケットお手軽版")
+
+    # 終了日を入力
+    Select(driver.find_element_by_name("ClosingYMD")).select_by_index(6)
+    print("終了日を入力")
+
+    # セールスモード
     click_element(
-        'xpath', '//*[@id="standardDeliveryArea"]/section/div/div/dl/dd/div/ul[1]/li[1]/label')
-    # '送料のクリア
-    driver.find_element_by_xpath(
-        '//*[@id="standardDeliveryArea"]/section/div/div/dl/dd/div/ul[1]/li[1]/div/div[2]/input').clear()
-    # 送料の入力
-    driver.find_element_by_xpath(
-        '//*[@id="standardDeliveryArea"]/section/div/div/dl/dd/div/ul[1]/li[1]/div/div[2]/input').send_keys(postage)
+        "xpath", '//*[@id="FormReqrd"]/section[4]/div[3]/div[2]/label[2]')
+    print("セールスモード:フリマ")
+
+    # 価格のクリア
+    driver.find_element_by_id(
+        'auc_BidOrBuyPrice_buynow').clear()
+    print("価格のクリア")
+    # 価格の入力
+    sendkeys_element("id",
+                     'auc_BidOrBuyPrice_buynow', price)
+    print("価格の入力")
 
     # 商品説明のクリア CTRL+A, DELETE
     driver.find_element_by_id(
@@ -159,26 +169,26 @@ while len(driver.find_elements_by_partial_link_text("布ぞうり")):
         driver.find_element_by_id("rteEditorComposition0").send_keys(line)
         driver.find_element_by_id(
             "rteEditorComposition0").send_keys(Keys.ENTER)
-    if debug_on:
-        input('入力待ち >>')
+    print("商品説明")
 
-    driver.find_element_by_xpath(
-        '//*[@id="auc_BidOrBuyPrice_buynow"]').clear()  # 価格のクリア
-    driver.find_element_by_xpath(
-        '//*[@id="auc_BidOrBuyPrice_buynow"]').send_keys(price)      # 価格の入力
-    time.sleep(1)
     # '出品するボタン
     if debug_on:
         input('入力待ち >>')
-
-    # 出品
-    click_element('xpath', '//*[@id="FormReqrd"]/ul/ul/li/input')
-    click_element('xpath', '//*[@id="auc_preview_submit"]')
+    click_element("css_selector", '.Inquiry__button')
+    print("確認ボタン")
+    click_element("id", 'auc_preview_submit')
+    print("出品ボタン")
 
     # 出品後に不要なダイアログが表示されたときは閉じる
-    if "display: block" in driver.find_element_by_xpath('//*[@id="yaucSellItemCmplt"]/div[10]').get_attribute("style"):
-        driver.find_element_by_xpath(
-            '//*[@id="yaucSellItemCmplt"]/div[10]/div/div/div/a[2]').click()
+    time.sleep(10)
+    # 名前とプロフィール画像を‥
+    if "display: block" in driver.find_element_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]').get_attribute("style"):
+        click_element(
+            "xpath", '//*[@id = "yaucSellItemCmplt"]/div[10]/div/div/div/a[2]')
+    # 支払いを直接‥
+    if "display: block" in driver.find_element_by_xpath('//*[@id="yaucSellItemCmplt"]/div[11]').get_attribute("style"):
+        click_element("link_text", 'とじる')
+
     click_element('link_text', 'マイオク')
     click_element('link_text', '出品終了分')
     click_element('link_text', '落札者なし')

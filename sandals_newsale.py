@@ -69,6 +69,7 @@ USER_ID = inifile.get('設定', 'ユーザーID')
 PASSWD = inifile.get('設定', 'パスワード')
 folder_name = inifile.get('設定', '画像フォルダ')
 total = inifile.get('出品', '出品数')
+start_no = inifile.get('出品', '開始番号')
 debug_on = inifile.get('設定', 'debug') == "ON"
 
 driver = webdriver.Chrome()
@@ -79,10 +80,8 @@ driver.get("https://auctions.yahoo.co.jp")
 
 if len(driver.find_elements_by_link_text("ログイン")) > 0:
     click_element("link_text", "ログイン")
-    time.sleep(1)
     sendkeys_element("id", "username", USER_ID)
     click_element("id", "btnNext")
-    time.sleep(1)
     sendkeys_element("id", "passwd", PASSWD)
 if not driver.find_element_by_id("persistent").is_selected():
     click_element("id", "persistent")
@@ -99,6 +98,7 @@ if len(driver.find_elements_by_class_name("is-show")) > 0:
     click_element("id", "js-ListingModalClose")
 
 for i in range(int(total)):
+    j = i + int(start_no)
     click_element("id", "acMdCateChange")  # カテゴリ選択
     click_element("link_text", "リストから選択する")
     click_element("id", "24198")  # 住まい
@@ -108,8 +108,8 @@ for i in range(int(total)):
     print('カテゴリ選択')
 
     click_element("link_text", "画像・編集登録画面")  # 写真の登録
-    sandal_size = inifile.get('出品', 'サイズ' + str(i))
-    sandal_no = inifile.get('出品', '通番' + str(i))
+    sandal_size = inifile.get('出品', 'サイズ' + str(j))
+    sandal_no = inifile.get('出品', '通番' + str(j))
     sendkeys_element("name", "ImageFile1", folder_name + sandal_no + '.jpg')
     sendkeys_element("name", "ImageFile2", folder_name + sandal_no + 'a.jpg')
     click_element("id", "cnfm_btn")
@@ -135,8 +135,9 @@ for i in range(int(total)):
 
     # '出品者が送料負担
     click_element("xpath",
-                  '//*[@id="FormReqrd"]/section[2]/div[6]/label[1]/input')
+                  '//*[@id="FormReqrd"]/section[2]/div[6]/label[1]')
     print("出品者が送料負担")
+
     # '1から2日で発送
     click_element("xpath",
                   '//*[@id="standardDeliveryArea"]/div[2]/label[1]')
@@ -159,22 +160,31 @@ for i in range(int(total)):
     print("ゆうパケットお手軽版")
 
     # 終了日を入力
-    Select(driver.find_element_by_name("ClosingYMD")).select_by_index(7)
+    Select(driver.find_element_by_name("ClosingYMD")).select_by_index(6)
     print("終了日を入力")
 
     # セールスモード
-    click_element("id", 'salesmode_buynow')
+    click_element(
+        "xpath", '//*[@id="FormReqrd"]/section[4]/div[3]/div[2]/label[2]')
     print("セールスモード:フリマ")
 
-    # '送料のクリア
-    driver.find_element_by_xpath(
-        '//*[@id="standardDeliveryArea"]/section/div/div/dl/dd/div/ul[1]/li[1]/div/div[2]/input').clear()
-    print("送料のクリア")
+    # タイトルのクリア
+    driver.find_element_by_id(
+        'fleaTitleForm').clear()
+    print("タイトルのクリア")
+    # タイトルの入力
+    sendkeys_element("id",
+                     'fleaTitleForm', "西村の布ぞうり %scm (%s)" % (sandal_size, sandal_no))
+    print("タイトルの入力 西村の布ぞうり %scm (%s)" % (sandal_size, sandal_no))
 
-    # 送料の入力
-    driver.find_element_by_xpath(
-        '//*[@id="standardDeliveryArea"]/section/div/div/dl/dd/div/ul[1]/li[1]/div/div[2]/input').send_keys(postage)
-    print("送料の入力")
+    # 価格のクリア
+    driver.find_element_by_id(
+        'auc_BidOrBuyPrice_buynow').clear()
+    print("価格のクリア")
+    # 価格の入力
+    sendkeys_element("id",
+                     'auc_BidOrBuyPrice_buynow', price)
+    print("価格の入力")
 
     # 商品説明のクリア CTRL+A, DELETE
     driver.find_element_by_id(
@@ -187,31 +197,22 @@ for i in range(int(total)):
             "rteEditorComposition0").send_keys(Keys.ENTER)
     print("商品説明")
 
-    if debug_on:
-        input('入力待ち >>')
-
-    driver.find_element_by_xpath(
-        '//*[@id="auc_BidOrBuyPrice_buynow"]').clear()  # 価格のクリア
-    print("価格のクリア")
-
-    sendkeys_element("xpath",
-        '//*[@id="auc_BidOrBuyPrice_buynow"]',price)      # 価格の入力
-    print("価格の入力")
-    time.sleep(1)
     # '出品するボタン
     if debug_on:
         input('入力待ち >>')
-    click_element("xpath", '//*[@id="FormReqrd"]/ul/ul/li/input')
-    time.sleep(1)
-    click_element("xpath", '//*[@id="auc_preview_submit"]')
-    time.sleep(1)
+    click_element("css_selector", '.Inquiry__button')
+    print("確認ボタン")
+    click_element("id", 'auc_preview_submit')
+    print("出品ボタン")
 
     # 出品後に不要なダイアログが表示されたときは閉じる
-    if "display: block" in driver.find_element_by_xpath('//*[@id="yaucSellItemCmplt"]/div[10]').get_attribute("style"):
-        click_element("xpath",
-                      '//*[@id="yaucSellItemCmplt"]/div[10]/div/div/div/a[2]')
+    time.sleep(10)
+    if "display: block" in driver.find_element_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]').get_attribute("style"): # 名前とプロフィール画像を‥
+        click_element(
+            "xpath", '//*[@id = "yaucSellItemCmplt"]/div[10]/div/div/div/a[2]')
+    if "display: block" in driver.find_element_by_xpath('//*[@id="yaucSellItemCmplt"]/div[11]').get_attribute("style"): # 支払いを直接‥
+        click_element("link_text",'とじる')
 
-    click_element("link_text", "マイオク")
-    click_element("link_text", "フリマ出品")
+    click_element("link_text", "出品")
 
 driver.quit()
