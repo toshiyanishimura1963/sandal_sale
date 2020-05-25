@@ -94,8 +94,9 @@ click_element('link_text', '落札者なし')
 # get all the href attributes
 # ダイアログの問い合わせステータス
 display_dialog1 = "yes"
-while len(driver.find_elements_by_partial_link_text("布ぞうり")) > 0:
-    print("再出品する布ぞうりの数: " + str(len(driver.find_elements_by_partial_link_text("布ぞうり"))))
+count = len(driver.find_elements_by_partial_link_text("布ぞうり"))
+while (count > 0):
+    print("再出品する布ぞうりの数: " + str(count))
     # 不要なダイアログの対応 落札者なしのリスト
     if len(driver.find_elements_by_class_name('closeBtn')) > 0:
         driver.execute_script(
@@ -138,7 +139,7 @@ while len(driver.find_elements_by_partial_link_text("布ぞうり")) > 0:
     Select(driver.find_element_by_name("istatus")).select_by_value('new')
     print("商品の状態を入力")
 
-     # ゆうパケットお手軽版
+    # ゆうパケットお手軽版
     click_element("xpath", '//*[@id="yubinForm"]/div[2]/ul/li[1]')
     print("ゆうパケットお手軽版")
 
@@ -192,6 +193,9 @@ while len(driver.find_elements_by_partial_link_text("布ぞうり")) > 0:
     click_element('link_text', 'マイオク')
     click_element('link_text', '出品終了分')
     click_element('link_text', '落札者なし')
+    WebDriverWait(driver, 30).until(
+        EC.element_to_be_clickable((By.LINK_TEXT, '落札者あり')))
+    count = len(driver.find_elements_by_partial_link_text("布ぞうり"))
 
 driver.quit()
 exit
