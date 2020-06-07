@@ -34,6 +34,9 @@ def click_element(element_type, element_name):
         WebDriverWait(driver, 30).until(
             EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT, element_name)))
         driver.find_element_by_partial_link_text(element_name).click()
+    else:
+        print("click_element error")
+        exit()
 
 
 def sendkeys_element(element_type, element_name, send_strings):
@@ -58,6 +61,10 @@ def sendkeys_element(element_type, element_name, send_strings):
             EC.presence_of_element_located((By.CSS_SELECTOR, element_name)))
         driver.find_element_by_css_selector(
             element_name).send_keys(send_strings)
+    else:
+        print("sendkeys_element error")
+        exit()
+      
 
 
 inifile = configparser.ConfigParser()
@@ -76,6 +83,13 @@ driver = webdriver.Chrome()
 # 要素が見つかるまで指定時間繰り返し探索するようになります。
 driver.implicitly_wait(20)  # 秒
 driver.get("https://auctions.yahoo.co.jp")
+
+# 不要なダイアログが表示されたときは閉じる
+if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
+    # click_element("xpath", "//a[@class='prMdl__close']")
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    driver.find_element_by_class_name('prMdl__close').click()
+    print("test")
 
 if len(driver.find_elements_by_link_text("ログイン")) > 0:
     click_element("link_text", "ログイン")
