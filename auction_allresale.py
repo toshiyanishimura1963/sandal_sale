@@ -139,7 +139,7 @@ while len(driver.find_elements_by_xpath("//img[@alt='再出品']")) > 0:
         input('入力待ち >>')
     click_element("css_selector", '.Inquiry__button')
     print("確認ボタン")
-    click_element("id", 'auc_preview_submit')
+    click_element("id", 'auc_preview_submit_up')
     print("出品ボタン")
 
     # 出品後に不要なダイアログが表示されたときは閉じる
