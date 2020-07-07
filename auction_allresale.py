@@ -84,9 +84,10 @@ driver.implicitly_wait(20)  # 秒
 driver.get("https://auctions.yahoo.co.jp")
 
 # 不要なダイアログが表示されたときは閉じる
-if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    driver.find_element_by_class_name('prMdl__close').click()
+if driver.find_elements_by_id('js-prMdl-sbym'):
+    if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        driver.find_element_by_class_name('prMdl__close').click()
 
 if len(driver.find_elements_by_link_text("ログイン")) > 0:
     click_element("link_text", "ログイン")
@@ -100,9 +101,10 @@ if len(driver.find_elements_by_link_text("ご利用中のサービスに戻る")
     click_element("link_text", "ご利用中のサービスに戻る")
 
 # 不要なダイアログが表示されたときは閉じる
-if "display: block" in driver.find_element_by_id('js-prMdl').get_attribute("style"):
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    driver.find_element_by_id('js-prMdl-close').click()
+if driver.find_elements_by_id('js-prMdl'):
+    if "display: block" in driver.find_element_by_id('js-prMdl').get_attribute("style"):
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        driver.find_element_by_id('js-prMdl-close').click()
 
 click_element('link_text', 'マイオク')
 click_element('link_text', '出品終了分')
@@ -145,12 +147,14 @@ while len(driver.find_elements_by_xpath("//img[@alt='再出品']")) > 0:
     # 出品後に不要なダイアログが表示されたときは閉じる
     time.sleep(10)
     # 名前とプロフィール画像を‥
-    if "display: block" in driver.find_element_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]').get_attribute("style"):
-        click_element(
-            "xpath", '//*[@id = "yaucSellItemCmplt"]/div[10]/div/div/div/a[2]')
+    if driver.find_elements_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]'):
+        if "display: block" in driver.find_element_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]').get_attribute("style"):
+            click_element(
+                "xpath", '//*[@id = "yaucSellItemCmplt"]/div[10]/div/div/div/a[2]')
     # 支払いを直接‥
-    if "display: block" in driver.find_element_by_xpath('//*[@id="yaucSellItemCmplt"]/div[11]').get_attribute("style"):
-        click_element("link_text", 'とじる')
+    if driver.find_elements_by_xpath('//*[@id="yaucSellItemCmplt"]/div[11]'):
+        if "display: block" in driver.find_element_by_xpath('//*[@id="yaucSellItemCmplt"]/div[11]').get_attribute("style"):
+            click_element("link_text", 'とじる')
 
     click_element('link_text', 'マイオク')
     click_element('link_text', '出品終了分')
