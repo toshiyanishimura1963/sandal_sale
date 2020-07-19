@@ -80,9 +80,10 @@ driver.get("https://auctions.yahoo.co.jp")
 
 # 不要なダイアログが表示されたときは閉じる
 time.sleep(4)
-if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    driver.find_element_by_class_name('prMdl__close').click()
+if driver.find_elements_by_id('js-prMdl-sbym'):
+    if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        driver.find_element_by_class_name('prMdl__close').click()
 
 if len(driver.find_elements_by_link_text("ログイン")) > 0:
     click_element("link_text", "ログイン")
@@ -209,16 +210,18 @@ for i in range(int(total)):
         input('入力待ち >>')
     click_element("css_selector", '.Inquiry__button')
     print("確認ボタン")
-    click_element("id", 'auc_preview_submit')
+    click_element("id", 'auc_preview_submit_up')
     print("出品ボタン")
 
     # 出品後に不要なダイアログが表示されたときは閉じる
     time.sleep(10)
-    if "display: block" in driver.find_element_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]').get_attribute("style"): # 名前とプロフィール画像を‥
-        click_element(
-            "xpath", '//*[@id = "yaucSellItemCmplt"]/div[10]/div/div/div/a[2]')
-    if "display: block" in driver.find_element_by_xpath('//*[@id="yaucSellItemCmplt"]/div[11]').get_attribute("style"): # 支払いを直接‥
-        click_element("link_text",'とじる')
+    if driver.find_elements_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]'):
+        if "display: block" in driver.find_element_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]').get_attribute("style"): # 名前とプロフィール画像を‥
+            click_element(
+                "xpath", '//*[@id = "yaucSellItemCmplt"]/div[10]/div/div/div/a[2]')
+    if driver.find_elements_by_xpath('//*[@id="yaucSellItemCmplt"]/div[11]'):
+        if "display: block" in driver.find_element_by_xpath('//*[@id="yaucSellItemCmplt"]/div[11]').get_attribute("style"): # 支払いを直接‥
+            click_element("link_text",'とじる')
 
     click_element("link_text", "出品")
 
