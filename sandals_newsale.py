@@ -116,6 +116,7 @@ for i in range(int(total)):
     click_element("link_text", "画像・編集登録画面")  # 写真の登録
     sandal_size = inifile.get('出品', 'サイズ' + str(j))
     sandal_no = inifile.get('出品', '通番' + str(j))
+    sandal_price = inifile.get('出品', '価格' + str(j))
     sendkeys_element("name", "ImageFile1", folder_name + sandal_no + '.jpg')
     sendkeys_element("name", "ImageFile2", folder_name + sandal_no + 'a.jpg')
     click_element("id", "cnfm_btn")
@@ -189,7 +190,7 @@ for i in range(int(total)):
     print("価格のクリア")
     # 価格の入力
     sendkeys_element("id",
-                     'auc_BidOrBuyPrice_buynow', price)
+                     'auc_BidOrBuyPrice_buynow', sandal_price)
     print("価格の入力")
 
     # 商品説明のクリア CTRL+A, DELETE
