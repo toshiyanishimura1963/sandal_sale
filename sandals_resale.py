@@ -152,14 +152,14 @@ while (count > 0):
         "xpath", '//*[@id="FormReqrd"]/section[4]/div[3]/div[2]/label[2]')
     print("セールスモード:フリマ")
 
-    # 価格のクリア
-    driver.find_element_by_id(
-        'auc_BidOrBuyPrice_buynow').clear()
-    print("価格のクリア")
-    # 価格の入力
-    sendkeys_element("id",
-                     'auc_BidOrBuyPrice_buynow', price)
-    print("価格の入力")
+    # # 価格のクリア
+    # driver.find_element_by_id(
+    #     'auc_BidOrBuyPrice_buynow').clear()
+    # print("価格のクリア")
+    # # 価格の入力
+    # sendkeys_element("id",
+    #                  'auc_BidOrBuyPrice_buynow', price)
+    # print("価格の入力")
 
     # 商品説明のクリア CTRL+A, DELETE
     driver.find_element_by_id(
@@ -177,18 +177,20 @@ while (count > 0):
         input('入力待ち >>')
     click_element("css_selector", '.Inquiry__button')
     print("確認ボタン")
-    click_element("id", 'auc_preview_submit')
+    click_element("id", 'auc_preview_submit_up')
     print("出品ボタン")
 
     # 出品後に不要なダイアログが表示されたときは閉じる
     time.sleep(10)
     # 名前とプロフィール画像を‥
-    if "display: block" in driver.find_element_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]').get_attribute("style"):
-        click_element(
-            "xpath", '//*[@id = "yaucSellItemCmplt"]/div[10]/div/div/div/a[2]')
+    if driver.find_elements_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]'):
+        if "display: block" in driver.find_element_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]').get_attribute("style"):
+            click_element(
+                "xpath", '//*[@id = "yaucSellItemCmplt"]/div[10]/div/div/div/a[2]')
     # 支払いを直接‥
-    if "display: block" in driver.find_element_by_xpath('//*[@id="yaucSellItemCmplt"]/div[11]').get_attribute("style"):
-        click_element("link_text", 'とじる')
+    if driver.find_elements_by_xpath('//*[@id="yaucSellItemCmplt"]/div[11]'):
+        if "display: block" in driver.find_element_by_xpath('//*[@id="yaucSellItemCmplt"]/div[11]').get_attribute("style"):
+            click_element("link_text", 'とじる')
 
     click_element('link_text', 'マイオク')
     click_element('link_text', '出品終了分')
