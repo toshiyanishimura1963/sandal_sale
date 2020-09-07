@@ -96,6 +96,9 @@ click_element("id", "btnSubmit")
 time.sleep(1)
 if len(driver.find_elements_by_link_text("ご利用中のサービスに戻る")) > 0:
     click_element("link_text", "ご利用中のサービスに戻る")
+time.sleep(4)
+if driver.find_elements_by_class_name('Close-mDrpk'):
+    driver.find_element_by_class_name('Close-mDrpk').click()
 
 click_element("link_text", "出品")
 
