@@ -76,10 +76,10 @@ driver.implicitly_wait(20)  # 秒
 driver.get("https://auctions.yahoo.co.jp")
 
 # 不要なダイアログが表示されたときは閉じる
-if driver.find_elements_by_id('js-prMdl-sbym'):
-    if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        driver.find_element_by_class_name('prMdl__close').click()
+# if driver.find_elements_by_id('js-prMdl-sbym'):
+#     if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
+#         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+#         driver.find_element_by_class_name('prMdl__close').click()
 
 # if len(driver.find_elements_by_link_text("ログイン")) > 0:
 #     click_element("link_text", "ログイン")

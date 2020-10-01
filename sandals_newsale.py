@@ -79,27 +79,28 @@ driver.implicitly_wait(10)  # 秒
 driver.get("https://auctions.yahoo.co.jp")
 
 # 不要なダイアログが表示されたときは閉じる
-time.sleep(4)
-if driver.find_elements_by_id('js-prMdl-sbym'):
-    if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        driver.find_element_by_class_name('prMdl__close').click()
+# time.sleep(4)
+# if driver.find_elements_by_id('js-prMdl-sbym'):
+#     if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
+#         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+#         driver.find_element_by_class_name('prMdl__close').click()
 
-if len(driver.find_elements_by_link_text("ログイン")) > 0:
-    click_element("link_text", "ログイン")
-    sendkeys_element("id", "username", USER_ID)
-    click_element("id", "btnNext")
-    sendkeys_element("id", "passwd", PASSWD)
-if not driver.find_element_by_id("persistent").is_selected():
-    click_element("id", "persistent")
-click_element("id", "btnSubmit")
-time.sleep(1)
-if len(driver.find_elements_by_link_text("ご利用中のサービスに戻る")) > 0:
-    click_element("link_text", "ご利用中のサービスに戻る")
-time.sleep(4)
-if driver.find_elements_by_class_name('Close-mDrpk'):
-    driver.find_element_by_class_name('Close-mDrpk').click()
+# if len(driver.find_elements_by_link_text("ログイン")) > 0:
+#     click_element("link_text", "ログイン")
+#     sendkeys_element("id", "username", USER_ID)
+#     click_element("id", "btnNext")
+#     sendkeys_element("id", "passwd", PASSWD)
+# if not driver.find_element_by_id("persistent").is_selected():
+#     click_element("id", "persistent")
+# click_element("id", "btnSubmit")
+# time.sleep(1)
+# if len(driver.find_elements_by_link_text("ご利用中のサービスに戻る")) > 0:
+#     click_element("link_text", "ご利用中のサービスに戻る")
+# time.sleep(4)
+# if driver.find_elements_by_class_name('Close-mDrpk'):
+#     driver.find_element_by_class_name('Close-mDrpk').click()
 
+input('ログイン後、出品のリンクが表示されるまで進んだあとに、エンターで再開 : ')
 click_element("link_text", "出品")
 
 # ダイアログが表示されているかどうか？の判定
