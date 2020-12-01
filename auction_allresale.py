@@ -1,5 +1,5 @@
 import time
-import chromedriver_binary
+# import chromedriver_binary
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -127,6 +127,13 @@ while len(driver.find_elements_by_xpath("//img[@alt='再出品']")) > 0:
             driver.find_element_by_class_name('closeBtn').click()
     click_element('xpath', "//img[@alt='再出品']")
 
+    time.sleep(1)
+    if driver.find_elements_by_xpath('//*[@id="js-ListingModal"]'):
+        if 'is-show' in driver.find_element_by_xpath('//*[@id="js-ListingModal"]').get_attribute('class'):
+            print('ヤフネコダイアログのクローズ')
+            click_element("css_selector",
+                          '.CrossListingModal__exhibitButton')
+
     # 値下げ交渉はしないので、値下げ交渉のチェックを外す
     if 'is-check' in driver.find_element_by_xpath('//*[@id="price_buynow"]/div[3]/label').get_attribute('class'):
         print('値引き交渉するのチェックを外す')
@@ -146,7 +153,7 @@ while len(driver.find_elements_by_xpath("//img[@alt='再出品']")) > 0:
     print("出品ボタン")
 
     # 出品後に不要なダイアログが表示されたときは閉じる
-    time.sleep(10)
+    time.sleep(2)
     # 名前とプロフィール画像を‥
     if driver.find_elements_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]'):
         if "display: block" in driver.find_element_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]').get_attribute("style"):
