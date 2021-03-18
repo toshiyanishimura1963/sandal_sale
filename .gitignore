@@ -12,3 +12,5 @@ chromedriver.exe
 python3-チートシート.pdf
 dist
 debug.log
+python.code-workspace
+.vscode/settings.json

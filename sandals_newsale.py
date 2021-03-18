@@ -1,5 +1,5 @@
 import time
-import chromedriver_binary
+# import chromedriver_binary
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -71,35 +71,18 @@ folder_name = inifile.get('設定', '画像フォルダ')
 total = inifile.get('出品', '出品数')
 start_no = inifile.get('出品', '開始番号')
 debug_on = inifile.get('設定', 'debug') == "ON"
+PROFILE_PATH = 'C:\\Users\\toshi\\AppData\\Local\\Temp\\scoped_dir8356_405916460\\'
 
-driver = webdriver.Chrome()
+# driver = webdriver.Chrome()
+options = webdriver.ChromeOptions()
+options.add_argument('--user-data-dir=' + PROFILE_PATH)
+# options.add_argument('--profile-directory=Profile 2')  # この行を省略するとDefaultフォルダが指定されます
+driver = webdriver.Chrome(options=options)
 # C:\Users\0844278\AppData\Local\Programs\Python\Python38-32\chromedriver.exe
 # 一度設定すると find_element 等の処理時に、
 # 要素が見つかるまで指定時間繰り返し探索するようになります。
-driver.implicitly_wait(10)  # 秒
+# driver.implicitly_wait(10)  # 秒
 driver.get("https://auctions.yahoo.co.jp")
-
-# 不要なダイアログが表示されたときは閉じる
-# time.sleep(4)
-# if driver.find_elements_by_id('js-prMdl-sbym'):
-#     if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
-#         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-#         driver.find_element_by_class_name('prMdl__close').click()
-
-# if len(driver.find_elements_by_link_text("ログイン")) > 0:
-#     click_element("link_text", "ログイン")
-#     sendkeys_element("id", "username", USER_ID)
-#     click_element("id", "btnNext")
-#     sendkeys_element("id", "passwd", PASSWD)
-# if not driver.find_element_by_id("persistent").is_selected():
-#     click_element("id", "persistent")
-# click_element("id", "btnSubmit")
-# time.sleep(1)
-# if len(driver.find_elements_by_link_text("ご利用中のサービスに戻る")) > 0:
-#     click_element("link_text", "ご利用中のサービスに戻る")
-# time.sleep(4)
-# if driver.find_elements_by_class_name('Close-mDrpk'):
-#     driver.find_element_by_class_name('Close-mDrpk').click()
 
 input('ログイン後、出品のリンクが表示されるまで進んだあとに、エンターで再開 : ')
 click_element("link_text", "出品")
@@ -119,16 +102,17 @@ for i in range(int(total)):
     click_element("id", "updateCategory")  # このカテゴリに決定
     print('カテゴリ選択')
 
-    click_element("link_text", "画像・編集登録画面")  # 写真の登録
     sandal_size = inifile.get('出品', 'サイズ' + str(j))
     sandal_no = inifile.get('出品', '通番' + str(j))
     sandal_price = inifile.get('出品', '価格' + str(j))
-    print("ImageFile1", folder_name + sandal_no + '.jpg')
-    sendkeys_element("name", "ImageFile1", folder_name + sandal_no + '.jpg')
-    sendkeys_element("name", "ImageFile2", folder_name + sandal_no + 'a.jpg')
-    click_element("id", "cnfm_btn")
-    click_element("id", "back_btn")
-    print("ImageFile1", folder_name + sandal_no + '.jpg')
+
+    input('画像ファイルの入力後、エンターで再開 : ')
+    # print("ImageFile1", folder_name + sandal_no + '.jpg')
+    # click_element("link_text", "画像・編集登録画面")  # 写真の登録
+    # sendkeys_element("name", "ImageFile1", folder_name + sandal_no + '.jpg')
+    # sendkeys_element("name", "ImageFile2", folder_name + sandal_no + 'a.jpg')
+    # click_element("id", "cnfm_btn")
+    # click_element("id", "back_btn")
 
     # 返品を受け付けるにチェックがはいっていない場合は、チェックする
     WebDriverWait(driver, 30).until(
