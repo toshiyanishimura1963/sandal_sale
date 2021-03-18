@@ -73,6 +73,7 @@ start_no = inifile.get('出品', '開始番号')
 debug_on = inifile.get('設定', 'debug') == "ON"
 
 driver = webdriver.Chrome()
+# C:\Users\0844278\AppData\Local\Programs\Python\Python38-32\chromedriver.exe
 # 一度設定すると find_element 等の処理時に、
 # 要素が見つかるまで指定時間繰り返し探索するようになります。
 driver.implicitly_wait(10)  # 秒
@@ -122,6 +123,7 @@ for i in range(int(total)):
     sandal_size = inifile.get('出品', 'サイズ' + str(j))
     sandal_no = inifile.get('出品', '通番' + str(j))
     sandal_price = inifile.get('出品', '価格' + str(j))
+    print("ImageFile1", folder_name + sandal_no + '.jpg')
     sendkeys_element("name", "ImageFile1", folder_name + sandal_no + '.jpg')
     sendkeys_element("name", "ImageFile2", folder_name + sandal_no + 'a.jpg')
     click_element("id", "cnfm_btn")
