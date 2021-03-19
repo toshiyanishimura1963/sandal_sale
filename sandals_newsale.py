@@ -1,6 +1,5 @@
 import time
 import os
-# import chromedriver_binary
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -106,20 +105,11 @@ for i in range(int(total)):
     sendkeys_element("id",
                      'fleaTitleForm', "西村の布ぞうり %scm (%s)" % (sandal_size, sandal_no))
     print("タイトルの入力 西村の布ぞうり %scm (%s)" % (sandal_size, sandal_no))
-    input('画像ファイルの入力後、エンターで再開 : ')
 
-    # click_element("link_text", "画像・編集登録画面")  # 写真の登録
-    # element = driver.find_element_by_css_selector('input.decInpt#ImageFile1')
-    # element = driver.execute_script("arguments[0].style.display = 'block'; return arguments[0];", element)
-    # print(element.value_of_css_property("display"))
-    # #now you can set value using send_keys
-    # element.send_keys(folder_name + sandal_no + '.jpg');
-
-    # sendkeys_element("css_selector", "input.decInpt#ImageFile1", folder_name + sandal_no + '.jpg')
-    # sendkeys_element("name", "ImageFile2", folder_name + sandal_no + 'a.jpg')
-    # click_element("id", "cnfm_btn")
-    # click_element("id", "back_btn")
-
+    sendkeys_element("id", "selectFile", folder_name + sandal_no + '.jpg')
+    time.sleep(8)
+    sendkeys_element("id", "selectFile", folder_name + sandal_no + 'a.jpg')
+    time.sleep(8)  
     click_element("id", "acMdCateChange")  # カテゴリ選択
     click_element("link_text", "リストから選択する")
     click_element("id", "24198")  # 住まい
