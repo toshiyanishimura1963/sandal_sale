@@ -14,3 +14,4 @@ dist
 debug.log
 python.code-workspace
 .vscode/settings.json
+UserData/

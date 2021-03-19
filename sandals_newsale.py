@@ -1,4 +1,5 @@
 import time
+import os
 # import chromedriver_binary
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -71,12 +72,11 @@ folder_name = inifile.get('設定', '画像フォルダ')
 total = inifile.get('出品', '出品数')
 start_no = inifile.get('出品', '開始番号')
 debug_on = inifile.get('設定', 'debug') == "ON"
-PROFILE_PATH = 'C:\\Users\\toshi\\AppData\\Local\\Temp\\scoped_dir8356_405916460\\'
 
-# driver = webdriver.Chrome()
+userdata_dir = 'UserData'  # カレントディレクトリの直下に作る場合
+os.makedirs(userdata_dir, exist_ok=True)
 options = webdriver.ChromeOptions()
-options.add_argument('--user-data-dir=' + PROFILE_PATH)
-# options.add_argument('--profile-directory=Profile 2')  # この行を省略するとDefaultフォルダが指定されます
+options.add_argument('--user-data-dir=' + userdata_dir)
 driver = webdriver.Chrome(options=options)
 # C:\Users\0844278\AppData\Local\Programs\Python\Python38-32\chromedriver.exe
 # 一度設定すると find_element 等の処理時に、
@@ -94,6 +94,32 @@ if len(driver.find_elements_by_class_name("is-show")) > 0:
 
 for i in range(int(total)):
     j = i + int(start_no)
+
+    sandal_size = inifile.get('出品', 'サイズ' + str(j))
+    sandal_no = inifile.get('出品', '通番' + str(j))
+    sandal_price = inifile.get('出品', '価格' + str(j))
+    # タイトルのクリア
+    driver.find_element_by_id(
+        'fleaTitleForm').clear()
+    print("タイトルのクリア")
+    # タイトルの入力
+    sendkeys_element("id",
+                     'fleaTitleForm', "西村の布ぞうり %scm (%s)" % (sandal_size, sandal_no))
+    print("タイトルの入力 西村の布ぞうり %scm (%s)" % (sandal_size, sandal_no))
+    input('画像ファイルの入力後、エンターで再開 : ')
+
+    # click_element("link_text", "画像・編集登録画面")  # 写真の登録
+    # element = driver.find_element_by_css_selector('input.decInpt#ImageFile1')
+    # element = driver.execute_script("arguments[0].style.display = 'block'; return arguments[0];", element)
+    # print(element.value_of_css_property("display"))
+    # #now you can set value using send_keys
+    # element.send_keys(folder_name + sandal_no + '.jpg');
+
+    # sendkeys_element("css_selector", "input.decInpt#ImageFile1", folder_name + sandal_no + '.jpg')
+    # sendkeys_element("name", "ImageFile2", folder_name + sandal_no + 'a.jpg')
+    # click_element("id", "cnfm_btn")
+    # click_element("id", "back_btn")
+
     click_element("id", "acMdCateChange")  # カテゴリ選択
     click_element("link_text", "リストから選択する")
     click_element("id", "24198")  # 住まい
@@ -101,18 +127,6 @@ for i in range(int(total)):
     click_element("id", "2084047779")  # スリッパ
     click_element("id", "updateCategory")  # このカテゴリに決定
     print('カテゴリ選択')
-
-    sandal_size = inifile.get('出品', 'サイズ' + str(j))
-    sandal_no = inifile.get('出品', '通番' + str(j))
-    sandal_price = inifile.get('出品', '価格' + str(j))
-
-    input('画像ファイルの入力後、エンターで再開 : ')
-    # print("ImageFile1", folder_name + sandal_no + '.jpg')
-    # click_element("link_text", "画像・編集登録画面")  # 写真の登録
-    # sendkeys_element("name", "ImageFile1", folder_name + sandal_no + '.jpg')
-    # sendkeys_element("name", "ImageFile2", folder_name + sandal_no + 'a.jpg')
-    # click_element("id", "cnfm_btn")
-    # click_element("id", "back_btn")
 
     # 返品を受け付けるにチェックがはいっていない場合は、チェックする
     WebDriverWait(driver, 30).until(
@@ -165,15 +179,6 @@ for i in range(int(total)):
     click_element(
         "xpath", '//*[@id="FormReqrd"]/section[4]/div[3]/div[2]/label[2]')
     print("セールスモード:フリマ")
-
-    # タイトルのクリア
-    driver.find_element_by_id(
-        'fleaTitleForm').clear()
-    print("タイトルのクリア")
-    # タイトルの入力
-    sendkeys_element("id",
-                     'fleaTitleForm', "西村の布ぞうり %scm (%s)" % (sandal_size, sandal_no))
-    print("タイトルの入力 西村の布ぞうり %scm (%s)" % (sandal_size, sandal_no))
 
     # 価格のクリア
     driver.find_element_by_id(
