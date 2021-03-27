@@ -1,5 +1,5 @@
 import time
-import chromedriver_binary
+import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -71,7 +71,12 @@ debug_on = inifile.get('設定', 'debug') == "ON"
 
 Shohin = input('再出品する商品タイトルの一部を入力してください: ')
 
-driver = webdriver.Chrome()
+userdata_dir = 'UserData'  # カレントディレクトリの直下に作る場合
+os.makedirs(userdata_dir, exist_ok=True)
+options = webdriver.ChromeOptions()
+options.add_argument('--user-data-dir=' + userdata_dir)
+driver = webdriver.Chrome(options=options)
+
 # 一度設定すると find_element 等の処理時に、
 # 要素が見つかるまで指定時間繰り返し探索するようになります。
 driver.implicitly_wait(20)  # 秒
