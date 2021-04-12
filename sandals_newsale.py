@@ -87,7 +87,7 @@ input('ログイン後、出品のリンクが表示されるまで進んだあ�
 click_element("link_text", "出品")
 
 # ダイアログが表示されているかどうか？の判定
-time.sleep(8)
+time.sleep(4)
 if len(driver.find_elements_by_class_name("is-show")) > 0:
     click_element("id", "js-ListingModalClose")
 
@@ -98,6 +98,7 @@ for i in range(int(total)):
     sandal_no = inifile.get('出品', '通番' + str(j))
     sandal_price = inifile.get('出品', '価格' + str(j))
     # タイトルのクリア
+    time.sleep(3)
     driver.find_element_by_id(
         'fleaTitleForm').clear()
     print("タイトルのクリア")
@@ -107,9 +108,9 @@ for i in range(int(total)):
     print("タイトルの入力 西村の布ぞうり %scm (%s)" % (sandal_size, sandal_no))
 
     sendkeys_element("id", "selectFile", folder_name + sandal_no + '.jpg')
-    time.sleep(8)
+    time.sleep(3)
     sendkeys_element("id", "selectFile", folder_name + sandal_no + 'a.jpg')
-    time.sleep(8)  
+    time.sleep(3)  
     click_element("id", "acMdCateChange")  # カテゴリ選択
     click_element("link_text", "リストから選択する")
     click_element("id", "24198")  # 住まい
@@ -199,7 +200,7 @@ for i in range(int(total)):
     print("出品ボタン")
 
     # 出品後に不要なダイアログが表示されたときは閉じる
-    time.sleep(10)
+    time.sleep(3)
     if driver.find_elements_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]'):
         if "display: block" in driver.find_element_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]').get_attribute("style"): # 名前とプロフィール画像を‥
             click_element(
