@@ -66,8 +66,9 @@ def sendkeys_element(element_type, element_name, send_strings):
 
 userdata_dir = 'UserData'  # カレントディレクトリの直下に作る場合
 os.makedirs(userdata_dir, exist_ok=True)
+cwdpath = os.getcwd()
 options = webdriver.ChromeOptions()
-options.add_argument('--user-data-dir=' + userdata_dir)
+options.add_argument('--user-data-dir=' + cwdpath + "/" + userdata_dir)
 driver = webdriver.Chrome(options=options)
 
 # 一度設定すると find_element 等の処理時に、

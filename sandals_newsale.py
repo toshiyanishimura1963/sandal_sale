@@ -74,8 +74,9 @@ debug_on = inifile.get('設定', 'debug') == "ON"
 
 userdata_dir = 'UserData'  # カレントディレクトリの直下に作る場合
 os.makedirs(userdata_dir, exist_ok=True)
+cwdpath = os.getcwd()
 options = webdriver.ChromeOptions()
-options.add_argument('--user-data-dir=' + userdata_dir)
+options.add_argument('--user-data-dir=' + cwdpath + "/" + userdata_dir)
 driver = webdriver.Chrome(options=options)
 # C:\Users\0844278\AppData\Local\Programs\Python\Python38-32\chromedriver.exe
 # 一度設定すると find_element 等の処理時に、
@@ -149,14 +150,6 @@ for i in range(int(total)):
     # 商品の状態を入力
     Select(driver.find_element_by_name("istatus")).select_by_value('new')
     print("商品の状態を入力")
-
-    # 'その他の配送方法
-    # if 'is-close' in driver.find_element_by_xpath('//*[@id="standardDeliveryArea"]/section/div/div/dl').get_attribute('class'):
-    #     click_element("xpath",
-    #                   '//*[@id="standardDeliveryArea"]/section/div/div/dl')
-    # 'クリックポスト
-    # click_element("xpath",
-    #               '//*[@id="standardDeliveryArea"]/section/div/div/dl/dd/div/ul[1]/li[1]/label')
 
     # ゆうパケットお手軽版
     click_element("xpath", '//*[@id="yubinForm"]/div[2]/ul/li[1]')

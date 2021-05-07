@@ -70,32 +70,15 @@ debug_on = inifile.get('設定', 'debug') == "ON"
 
 userdata_dir = 'UserData'  # カレントディレクトリの直下に作る場合
 os.makedirs(userdata_dir, exist_ok=True)
+cwdpath = os.getcwd()
 options = webdriver.ChromeOptions()
-options.add_argument('--user-data-dir=' + userdata_dir)
+options.add_argument('--user-data-dir=' + cwdpath + "/" + userdata_dir)
 driver = webdriver.Chrome(options=options)
 
 # 一度設定すると find_element 等の処理時に、
 # 要素が見つかるまで指定時間繰り返し探索するようになります。
 driver.implicitly_wait(20)  # 秒
 driver.get("https://auctions.yahoo.co.jp")
-
-# 不要なダイアログが表示されたときは閉じる
-# if driver.find_elements_by_id('js-prMdl-sbym'):
-#     if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
-#         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-#         driver.find_element_by_class_name('prMdl__close').click()
-
-# if len(driver.find_elements_by_link_text("ログイン")) > 0:
-#     click_element("link_text", "ログイン")
-#     sendkeys_element("id", "username", USER_ID)
-#     click_element("id", "btnNext")
-#     sendkeys_element("id", "passwd", PASSWD)
-# if not driver.find_element_by_id("persistent").is_selected():
-#     click_element("id", "persistent")
-# click_element("id", "btnSubmit")
-# time.sleep(1)
-# if len(driver.find_elements_by_link_text("ご利用中のサービスに戻る")) > 0:
-#     click_element("link_text", "ご利用中のサービスに戻る")
 
 input('ログイン後、マイオクのリンクが表示されるまで進んだあとに、エンターで再開 : ')
 
@@ -163,15 +146,6 @@ while (count > 0):
     click_element(
         "xpath", '//*[@id="FormReqrd"]/section[4]/div[3]/div[2]/label[2]')
     print("セールスモード:フリマ")
-
-    # # 価格のクリア
-    # driver.find_element_by_id(
-    #     'auc_BidOrBuyPrice_buynow').clear()
-    # print("価格のクリア")
-    # # 価格の入力
-    # sendkeys_element("id",
-    #                  'auc_BidOrBuyPrice_buynow', price)
-    # print("価格の入力")
 
     # 商品説明のクリア CTRL+A, DELETE
     driver.find_element_by_id(
