@@ -1,5 +1,5 @@
 import time
-import chromedriver_binary
+import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -34,6 +34,9 @@ def click_element(element_type, element_name):
         WebDriverWait(driver, 30).until(
             EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT, element_name)))
         driver.find_element_by_partial_link_text(element_name).click()
+    else:
+        print("click_element error")
+        exit()
 
 
 def sendkeys_element(element_type, element_name, send_strings):
@@ -58,6 +61,9 @@ def sendkeys_element(element_type, element_name, send_strings):
             EC.presence_of_element_located((By.CSS_SELECTOR, element_name)))
         driver.find_element_by_css_selector(
             element_name).send_keys(send_strings)
+    else:
+        print("sendkeys_element error")
+        exit()
 
 
 inifile = configparser.ConfigParser()
@@ -69,29 +75,14 @@ USER_ID = inifile.get('設定', 'ユーザーID')
 PASSWD = inifile.get('設定', 'パスワード')
 debug_on = inifile.get('設定', 'debug') == "ON"
 
-driver = webdriver.Chrome()
-# 一度設定すると find_element 等の処理時に、
-# 要素が見つかるまで指定時間繰り返し探索するようになります。
-driver.implicitly_wait(20)  # 秒
+userdata_dir = 'UserData'  # カレントディレクトリの直下に作る場合
+os.makedirs(userdata_dir, exist_ok=True)
+options = webdriver.ChromeOptions()
+options.add_argument('--user-data-dir=' + userdata_dir)
+driver = webdriver.Chrome(options=options)
+
 driver.get("https://auctions.yahoo.co.jp")
 
-# 不要なダイアログが表示されたときは閉じる
-# if driver.find_elements_by_id('js-prMdl-sbym'):
-#     if "display: block" in driver.find_element_by_id('js-prMdl-sbym').get_attribute("style"):
-#         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-#         driver.find_element_by_class_name('prMdl__close').click()
-
-# if len(driver.find_elements_by_link_text("ログイン")) > 0:
-#     click_element("link_text", "ログイン")
-#     sendkeys_element("id", "username", USER_ID)
-#     click_element("id", "btnNext")
-#     sendkeys_element("id", "passwd", PASSWD)
-# if not driver.find_element_by_id("persistent").is_selected():
-#     click_element("id", "persistent")
-# click_element("id", "btnSubmit")
-# time.sleep(1)
-# if len(driver.find_elements_by_link_text("ご利用中のサービスに戻る")) > 0:
-#     click_element("link_text", "ご利用中のサービスに戻る")
 
 input('ログイン後、マイオクのリンクが表示されるまで進んだあとに、エンターで再開 : ')
 
