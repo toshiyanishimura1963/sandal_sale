@@ -8,7 +8,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 import configparser
 
-
 def click_element(element_type, element_name):
     if element_type == 'id':
         WebDriverWait(driver, 30).until(
@@ -77,12 +76,15 @@ debug_on = inifile.get('設定', 'debug') == "ON"
 
 userdata_dir = 'UserData'  # カレントディレクトリの直下に作る場合
 os.makedirs(userdata_dir, exist_ok=True)
+cwdpath = os.getcwd()
 options = webdriver.ChromeOptions()
-options.add_argument('--user-data-dir=' + userdata_dir)
+options.add_argument('--user-data-dir=' + cwdpath + "/" + userdata_dir)
 driver = webdriver.Chrome(options=options)
 
+# 一度設定すると find_element 等の処理時に、
+# 要素が見つかるまで指定時間繰り返し探索するようになります。
+driver.implicitly_wait(20)  # 秒
 driver.get("https://auctions.yahoo.co.jp")
-
 
 input('ログイン後、マイオクのリンクが表示されるまで進んだあとに、エンターで再開 : ')
 
@@ -150,15 +152,6 @@ while (count > 0):
     click_element(
         "xpath", '//*[@id="FormReqrd"]/section[4]/div[3]/div[2]/label[2]')
     print("セールスモード:フリマ")
-
-    # # 価格のクリア
-    # driver.find_element_by_id(
-    #     'auc_BidOrBuyPrice_buynow').clear()
-    # print("価格のクリア")
-    # # 価格の入力
-    # sendkeys_element("id",
-    #                  'auc_BidOrBuyPrice_buynow', price)
-    # print("価格の入力")
 
     # 商品説明のクリア CTRL+A, DELETE
     driver.find_element_by_id(

@@ -74,8 +74,9 @@ debug_on = inifile.get('設定', 'debug') == "ON"
 
 userdata_dir = 'UserData'  # カレントディレクトリの直下に作る場合
 os.makedirs(userdata_dir, exist_ok=True)
+cwdpath = os.getcwd()
 options = webdriver.ChromeOptions()
-options.add_argument('--user-data-dir=' + userdata_dir)
+options.add_argument('--user-data-dir=' + cwdpath + "/" + userdata_dir)
 driver = webdriver.Chrome(options=options)
 # C:\Users\0844278\AppData\Local\Programs\Python\Python38-32\chromedriver.exe
 # 一度設定すると find_element 等の処理時に、
@@ -87,7 +88,7 @@ input('ログイン後、出品のリンクが表示されるまで進んだあ�
 click_element("link_text", "出品")
 
 # ダイアログが表示されているかどうか？の判定
-time.sleep(8)
+time.sleep(4)
 if len(driver.find_elements_by_class_name("is-show")) > 0:
     click_element("id", "js-ListingModalClose")
 
@@ -98,6 +99,7 @@ for i in range(int(total)):
     sandal_no = inifile.get('出品', '通番' + str(j))
     sandal_price = inifile.get('出品', '価格' + str(j))
     # タイトルのクリア
+    time.sleep(3)
     driver.find_element_by_id(
         'fleaTitleForm').clear()
     print("タイトルのクリア")
@@ -105,20 +107,11 @@ for i in range(int(total)):
     sendkeys_element("id",
                      'fleaTitleForm', "西村の布ぞうり %scm (%s)" % (sandal_size, sandal_no))
     print("タイトルの入力 西村の布ぞうり %scm (%s)" % (sandal_size, sandal_no))
-    input('画像ファイルの入力後、エンターで再開 : ')
 
-    # click_element("link_text", "画像・編集登録画面")  # 写真の登録
-    # element = driver.find_element_by_css_selector('input.decInpt#ImageFile1')
-    # element = driver.execute_script("arguments[0].style.display = 'block'; return arguments[0];", element)
-    # print(element.value_of_css_property("display"))
-    # #now you can set value using send_keys
-    # element.send_keys(folder_name + sandal_no + '.jpg');
-
-    # sendkeys_element("css_selector", "input.decInpt#ImageFile1", folder_name + sandal_no + '.jpg')
-    # sendkeys_element("name", "ImageFile2", folder_name + sandal_no + 'a.jpg')
-    # click_element("id", "cnfm_btn")
-    # click_element("id", "back_btn")
-
+    sendkeys_element("id", "selectFile", folder_name + sandal_no + '.jpg')
+    time.sleep(3)
+    sendkeys_element("id", "selectFile", folder_name + sandal_no + 'a.jpg')
+    time.sleep(3)  
     click_element("id", "acMdCateChange")  # カテゴリ選択
     click_element("link_text", "リストから選択する")
     click_element("id", "24198")  # 住まい
@@ -157,14 +150,6 @@ for i in range(int(total)):
     # 商品の状態を入力
     Select(driver.find_element_by_name("istatus")).select_by_value('new')
     print("商品の状態を入力")
-
-    # 'その他の配送方法
-    # if 'is-close' in driver.find_element_by_xpath('//*[@id="standardDeliveryArea"]/section/div/div/dl').get_attribute('class'):
-    #     click_element("xpath",
-    #                   '//*[@id="standardDeliveryArea"]/section/div/div/dl')
-    # 'クリックポスト
-    # click_element("xpath",
-    #               '//*[@id="standardDeliveryArea"]/section/div/div/dl/dd/div/ul[1]/li[1]/label')
 
     # ゆうパケットお手軽版
     click_element("xpath", '//*[@id="yubinForm"]/div[2]/ul/li[1]')
@@ -208,7 +193,7 @@ for i in range(int(total)):
     print("出品ボタン")
 
     # 出品後に不要なダイアログが表示されたときは閉じる
-    time.sleep(10)
+    time.sleep(3)
     if driver.find_elements_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]'):
         if "display: block" in driver.find_element_by_xpath('//*[@id = "yaucSellItemCmplt"]/div[10]').get_attribute("style"): # 名前とプロフィール画像を‥
             click_element(

@@ -1,4 +1,5 @@
 import time
+import os
 # import chromedriver_binary
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -62,7 +63,14 @@ def sendkeys_element(element_type, element_name, send_strings):
         print("sendkeys_element error")
         exit()
 
-driver = webdriver.Chrome()
+
+userdata_dir = 'UserData'  # カレントディレクトリの直下に作る場合
+os.makedirs(userdata_dir, exist_ok=True)
+cwdpath = os.getcwd()
+options = webdriver.ChromeOptions()
+options.add_argument('--user-data-dir=' + cwdpath + "/" + userdata_dir)
+driver = webdriver.Chrome(options=options)
+
 # 一度設定すると find_element 等の処理時に、
 # 要素が見つかるまで指定時間繰り返し探索するようになります。
 driver.implicitly_wait(20)  # 秒
