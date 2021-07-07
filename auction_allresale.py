@@ -117,11 +117,11 @@ while len(driver.find_elements_by_xpath("//img[@alt='再出品']")) > 0:
             click_element("css_selector",
                           '.CrossListingModal__exhibitButton')
 
-    # 値下げ交渉はしないので、値下げ交渉のチェックを外す
-    if 'is-check' in driver.find_element_by_xpath('//*[@id="price_buynow"]/div[3]/label').get_attribute('class'):
-        print('値引き交渉するのチェックを外す')
-        click_element("xpath",
-                      '//*[@id="price_buynow"]/div[3]/label/span[1]')
+    # # 値下げ交渉はしないので、値下げ交渉のチェックを外す
+    # if 'is-check' in driver.find_element_by_xpath('//*[@id="price_buynow"]/div[3]/label').get_attribute('class'):
+    #     print('値引き交渉するのチェックを外す')
+    #     click_element("xpath",
+    #                   '//*[@id="price_buynow"]/div[3]/label/span[1]')
 
     # 終了日を入力
     Select(driver.find_element_by_name("ClosingYMD")).select_by_index(6)
