@@ -122,10 +122,11 @@ for i in range(int(total)):
 
     # 返品を受け付けるにチェックがはいっていない場合は、チェックする
     WebDriverWait(driver, 30).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="FormReqrd"]/div[13]/input')))
-    if driver.find_element_by_xpath('//*[@id="FormReqrd"]/div[13]/input').get_attribute('value') == "0":
+        EC.presence_of_element_located((By.XPATH, '//*[@id="js-PCNonPreReutnPolicyArea"]/input')))
+    if driver.find_element_by_xpath('//*[@id="js-PCNonPreReutnPolicyArea"]/input').get_attribute('value') == "0":
         print('返品可をチェックする')
-        click_element("xpath", '//*[@id="FormReqrd"]/div[13]/label/span[1]')
+        click_element(
+            "xpath", '//*[@id="js-PCNonPreReutnPolicyArea"]/label/span[1]')
 
     # 値下げ交渉はしないので、値下げ交渉のチェックを外す
     if 'is-check' in driver.find_element_by_xpath('//*[@id="price_buynow"]/div[3]/label').get_attribute('class'):
