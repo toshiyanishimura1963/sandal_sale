@@ -1,1 +1,0 @@
-"# sandal_sale" 
