@@ -66,7 +66,6 @@ def sendkeys_element(element_type, element_name, send_strings):
         print("sendkeys_element error")
         exit()
 
-
 inifile = configparser.ConfigParser()
 inifile.read('./sandals.ini', 'UTF-8')
 price = inifile.get('設定', '価格')
