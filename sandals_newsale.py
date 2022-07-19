@@ -143,7 +143,7 @@ for i in range(int(total)):
     #     click_element("xpath",
     #                   '//*[@id="price_buynow"]/div[3]/label/span[1]')
 
-    if len(driver.find_element(By.LINK_TEXT, "HTMLタグ入力")) > 0:
+    if len(driver.find_elements(By.LINK_TEXT, "HTMLタグ入力")) > 0:
         click_element("link_text", "HTMLタグ入力")
         print('HTMLタグ入力')
 
