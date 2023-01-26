@@ -1,6 +1,8 @@
 import time
 import os
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -82,9 +84,10 @@ cwdpath = os.getcwd()
 options = webdriver.chrome.options.Options()
 options.add_argument('--user-data-dir=' + cwdpath + "\\" + userdata_dir)
 options.add_argument('--profile-directory=Profile 1')
-driver = webdriver.Chrome(options=options)
-# driver = webdriver.Chrome()
+# driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
+# driver = webdriver.Chrome()
 # 一度設定すると find_element 等の処理時に、
 # 要素が見つかるまで指定時間繰り返し探索するようになります。
 driver.implicitly_wait(20)  # 秒
@@ -126,7 +129,7 @@ while len(driver.find_elements(By.XPATH, "//img[@alt='再出品']")) > 0:
     #                   '//*[@id="price_buynow"]/div[3]/label/span[1]')
 
     # 終了日を入力
-    Select(driver.find_element(By.NAME, "ClosingYMD")).select_by_index(6)
+    Select(driver.find_element(By.NAME, "ClosingYMD")).select_by_index(3)
     print("終了日を入力")
 
     # '出品するボタン

@@ -1,6 +1,7 @@
 import time
 import os
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -76,7 +77,8 @@ os.makedirs(userdata_dir, exist_ok=True)
 cwdpath = os.getcwd()
 options = webdriver.ChromeOptions()
 options.add_argument('--user-data-dir=' + cwdpath + "/" + userdata_dir)
-driver = webdriver.Chrome(options=options)
+# driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
 # 一度設定すると find_element 等の処理時に、
 # 要素が見つかるまで指定時間繰り返し探索するようになります。
