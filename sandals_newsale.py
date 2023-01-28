@@ -69,7 +69,7 @@ def sendkeys_element(element_type, element_name, send_strings):
 
 inifile = configparser.ConfigParser()
 inifile.read('./sandals.ini', 'UTF-8')
-price = inifile.get('設定', '価格')
+endday = inifile.get('設定', '終了日')
 postage = inifile.get('設定', '送料')
 description = inifile.get('設定', '商品説明')
 USER_ID = inifile.get('設定', 'ユーザーID')
@@ -139,12 +139,6 @@ for i in range(int(total)):
         click_element(
             "xpath", '//*[@id="js-PCNonPreReutnPolicyArea"]/label/span[1]')
 
-    # # 値下げ交渉はしないので、値下げ交渉のチェックを外す
-    # if 'is-check' in driver.find_element(By.XPATH,'//*[@id="price_buynow"]/div[3]/label').get_attribute('class'):
-    #     print('値引き交渉するのチェックを外す')
-    #     click_element("xpath",
-    #                   '//*[@id="price_buynow"]/div[3]/label/span[1]')
-
     if len(driver.find_elements(By.LINK_TEXT, "HTMLタグ入力")) > 0:
         click_element("link_text", "HTMLタグ入力")
         print('HTMLタグ入力')
@@ -168,7 +162,7 @@ for i in range(int(total)):
     print("ゆうパケットお手軽版")
 
     # 終了日を入力
-    Select(driver.find_element(By.NAME, "ClosingYMD")).select_by_index(6)
+    Select(driver.find_element(By.NAME, "ClosingYMD")).select_by_index(endday)
     print("終了日を入力")
 
     # セールスモード

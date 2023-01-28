@@ -62,7 +62,7 @@ def sendkeys_element(element_type, element_name, send_strings):
 
 inifile = configparser.ConfigParser()
 inifile.read('./sandals.ini', 'UTF-8')
-price = inifile.get('設定', '価格')
+endday = inifile.get('設定', '終了日')
 postage = inifile.get('設定', '送料')
 description = inifile.get('設定', '商品説明')
 USER_ID = inifile.get('設定', 'ユーザーID')
@@ -141,7 +141,7 @@ while (count > 0):
     print("ゆうパケットお手軽版")
 
     # 終了日を入力
-    Select(driver.find_element_by_name("ClosingYMD")).select_by_index(6)
+    Select(driver.find_element_by_name("ClosingYMD")).select_by_index(endday)
     print("終了日を入力")
 
     # セールスモード
