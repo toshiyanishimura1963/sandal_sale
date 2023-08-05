@@ -10,6 +10,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.chrome import service
 import configparser
+import warnings
+warnings.filterwarnings('ignore')
 
 
 def click_element(element_type, element_name):
