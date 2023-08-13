@@ -16,27 +16,27 @@ warnings.filterwarnings('ignore')
 
 def click_element(element_type, element_name):
     if element_type == 'id':
-        WebDriverWait(driver, 30).until(
+        WebDriverWait\(driver, 10\).until(
             EC.element_to_be_clickable((By.ID, element_name)))
         driver.find_element(By.ID, element_name).click()
     elif element_type == 'link_text':
-        WebDriverWait(driver, 30).until(
+        WebDriverWait\(driver, 10\).until(
             EC.element_to_be_clickable((By.LINK_TEXT, element_name)))
         driver.find_element(By.LINK_TEXT, element_name).click()
     elif element_type == 'xpath':
-        WebDriverWait(driver, 30).until(
+        WebDriverWait\(driver, 10\).until(
             EC.element_to_be_clickable((By.XPATH, element_name)))
         driver.find_element(By.XPATH, element_name).click()
     elif element_type == 'name':
-        WebDriverWait(driver, 30).until(
+        WebDriverWait\(driver, 10\).until(
             EC.element_to_be_clickable((By.NAME, element_name)))
         driver.find_element(By.NAME, element_name).click()
     elif element_type == 'css_selector':
-        WebDriverWait(driver, 30).until(
+        WebDriverWait\(driver, 10\).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, element_name)))
         driver.find_element(By.CSS_SELECTOR, element_name).click()
     elif element_type == 'partial_link_text':
-        WebDriverWait(driver, 30).until(
+        WebDriverWait\(driver, 10\).until(
             EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT, element_name)))
         driver.find_element(By.PARTIAL_LINK_TEXT, element_name).click()
     else:
@@ -46,23 +46,23 @@ def click_element(element_type, element_name):
 
 def sendkeys_element(element_type, element_name, send_strings):
     if element_type == 'id':
-        WebDriverWait(driver, 30).until(
+        WebDriverWait\(driver, 10\).until(
             EC.presence_of_element_located((By.ID, element_name)))
         driver.find_element(By.ID, element_name).send_keys(send_strings)
     elif element_type == 'link_text':
-        WebDriverWait(driver, 30).until(
+        WebDriverWait\(driver, 10\).until(
             EC.presence_of_element_located((By.LINK_TEXT, element_name)))
         driver.find_element(By.LINK_TEXT, element_name).send_keys(send_strings)
     elif element_type == 'xpath':
-        WebDriverWait(driver, 30).until(
+        WebDriverWait\(driver, 10\).until(
             EC.presence_of_element_located((By.XPATH, element_name)))
         driver.find_element(By.XPATH, element_name).send_keys(send_strings)
     elif element_type == 'name':
-        WebDriverWait(driver, 30).until(
+        WebDriverWait\(driver, 10\).until(
             EC.presence_of_element_located((By.NAME, element_name)))
         driver.find_element(By.NAME, element_name).send_keys(send_strings)
     elif element_type == 'css_selector':
-        WebDriverWait(driver, 30).until(
+        WebDriverWait\(driver, 10\).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, element_name)))
         driver.find_element(By.CSS_SELECTOR, 
             element_name).send_keys(send_strings)
@@ -92,8 +92,8 @@ driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 # driver = webdriver.Chrome()
 # 一度設定すると find_element 等の処理時に、
 # 要素が見つかるまで指定時間繰り返し探索するようになります。
-driver.implicitly_wait(20)  # 秒
-time.sleep(7)
+driver.implicitly_wait(10)  # 秒
+time.sleep(3)
 driver.get("https://auctions.yahoo.co.jp/")
 
 input('ログイン後、マイオクのリンクが表示されるまで進んだあとに、エンターで再開 : ')
@@ -103,7 +103,7 @@ click_element('link_text', '落札者なし')
 
 # ダイアログの問い合わせステータス
 display_dialog1 = "yes"
-WebDriverWait(driver, 30).until(
+WebDriverWait\(driver, 10\).until(
         EC.element_to_be_clickable((By.LINK_TEXT, '落札者あり')))
 while len(driver.find_elements(By.XPATH, "//img[@alt='再出品']")) > 0:
     print("再出品する商品の数: " + str(len(driver.find_elements(By.XPATH, "//img[@alt='再出品']"))))
